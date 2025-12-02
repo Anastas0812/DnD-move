@@ -1,0 +1,182 @@
+/* @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); */
+
+body {
+  background-color: rgb(4, 147, 203);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: 0 auto;
+  gap: 15px;
+}
+
+.head-column {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.three-dots {
+  font-size: 24px;
+  color: #6e6b6b;
+  cursor: default;
+}
+
+.column {
+  background-color: rgb(208, 208, 208);
+  width: 30%;
+  min-width: 250px;
+  min-height: 100px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-content {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  color: rgb(99, 105, 126);
+}
+
+.cards-container {
+  flex-grow: 1;
+  min-height: 20px;
+  margin-bottom: 10px;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 3px;
+  cursor: grab;
+  height: auto;
+  min-height: 30px;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  position: relative; 
+  padding-right: 25px;
+  user-select: none;
+}
+
+.dragging-active {
+  cursor: grabbing;
+}
+
+.card.dragging {
+  opacity: 0.5;
+  z-index: 1000;
+  cursor: grabbing;
+  transform: rotate(5deg);
+}
+
+.drop-placeholder {
+  background: rgba(62, 162, 220, 0.196);
+  border: 2px dashed #ccc;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  min-height: 40px;
+}
+
+.card-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.card:hover .card-delete {
+  opacity: 1;
+}
+
+.card-delete:hover {
+  background: rgba(81, 59, 128, 0.197);
+}
+
+.add-card-section {
+  margin-top: auto;
+}
+
+.plus-link {
+  color: rgb(0, 0, 146);
+  padding: 5px;
+}
+
+.plus-link:hover {
+  background: rgba(99, 99, 99, 0.614);
+  border-radius: 3px;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  color: rgb(0, 0, 146);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin-left: 5px;
+}
+
+.add-card-form {
+  margin-top: 5px;
+  display: none;
+}
+
+.card-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.btn-add-and-cross {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* display: none; */
+}
+
+.btn-add-card {
+  background: rgb(75, 185, 75);
+  border: none;
+  color: white;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-cross {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: grey;
+  padding: 4px 8px;
+}
+
+.btn-cross:hover {
+  color: #000;
+}
