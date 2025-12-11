@@ -80,6 +80,9 @@ export class Board {
     this.dragData.card = card;
     this.dragData.sourceColumn = card.element.closest(".column");
 
+    document.body.style.cursor = "grabbing";
+    document.body.style.userSelect = "none";
+
     const rect = card.element.getBoundingClientRect();
     this.dragData.offset.x = e.clientX - rect.left;
     this.dragData.offset.y = e.clientY - rect.top;
@@ -94,7 +97,7 @@ export class Board {
     this.dragData.ghost.style.top = e.clientY - this.dragData.offset.y + "px";
     this.dragData.ghost.style.pointerEvents = "none";
     this.dragData.ghost.style.zIndex = "10000";
-    document.body.appendChild(this.dragData.ghost);
+    document.body.append(this.dragData.ghost);
 
     // placeholder
     this.dragData.placeholder = document.createElement("div");
@@ -103,7 +106,7 @@ export class Board {
     this.dragData.placeholder.style.height = rect.height + "px";
 
     const container = card.element.parentNode;
-    container.insertBefore(this.dragData.placeholder, card.element);
+    card.element.before(this.dragData.placeholder);
     card.element.style.display = "none";
 
     //  обработчики
@@ -153,7 +156,9 @@ export class Board {
     }
 
     // апдейт placeholder
-    this.updatePlaceholder(targetColumn, targetCard, insertBefore);
+    if (targetColumn) {
+      this.updatePlaceholder(targetColumn, targetCard, insertBefore);
+    }
   }
 
   updatePlaceholder(columnElement, targetCard, insertBefore) {
@@ -161,26 +166,28 @@ export class Board {
 
     const container = columnElement.querySelector(".cards-container");
 
+    if (!container) {
+      if (this.dragData.placeholder && this.dragData.placeholder.parentNode) {
+        this.dragData.placeholder.remove();
+      }
+      return;
+    }
+
     if (this.dragData.placeholder.parentNode) {
-      this.dragData.placeholder.parentNode.removeChild(
-        this.dragData.placeholder,
-      );
+      this.dragData.placeholder.remove();
     }
 
     if (targetCard && targetCard.parentNode === container) {
       if (insertBefore) {
-        container.insertBefore(this.dragData.placeholder, targetCard);
+        targetCard.before(this.dragData.placeholder);
       } else {
-        container.insertBefore(
-          this.dragData.placeholder,
-          targetCard.nextSibling,
-        );
+        targetCard.after(this.dragData.placeholder);
       }
     } else {
       if (container.children.length > 0) {
-        container.insertBefore(this.dragData.placeholder, container.firstChild);
+        container.prepend(this.dragData.placeholder);
       } else {
-        container.appendChild(this.dragData.placeholder);
+        container.append(this.dragData.placeholder);
       }
     }
   }
@@ -207,30 +214,27 @@ export class Board {
         insertIndex = children.length;
       }
 
-      container.removeChild(this.dragData.placeholder);
+      this.dragData.placeholder.remove();
       this.dragData.card.element.style.display = "";
 
       const currentChildren = Array.from(container.children);
       if (insertIndex < currentChildren.length) {
-        container.insertBefore(
-          this.dragData.card.element,
-          currentChildren[insertIndex],
-        );
+        currentChildren[insertIndex].before(this.dragData.card.element);
       } else {
-        container.appendChild(this.dragData.card.element);
+        container.append(this.dragData.card.element);
       }
 
       this.saveCardMove(targetColumnId, insertIndex);
     } else {
       this.dragData.card.element.style.display = "";
       if (this.dragData.placeholder && this.dragData.placeholder.parentNode) {
-        this.dragData.placeholder.parentNode.removeChild(
-          this.dragData.placeholder,
-        );
+        this.dragData.placeholder.remove();
       }
     }
 
     this.cleanupDrag();
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
   }
 
   saveCardMove(targetColumnId, insertIndex) {
@@ -272,14 +276,15 @@ export class Board {
   cleanupDrag() {
     // Удаляем ghost
     if (this.dragData.ghost) {
-      document.body.removeChild(this.dragData.ghost);
+      this.dragData.ghost.remove();
     }
 
     if (this.dragData.placeholder && this.dragData.placeholder.parentNode) {
-      this.dragData.placeholder.parentNode.removeChild(
-        this.dragData.placeholder,
-      );
+      this.dragData.placeholder.remove();
     }
+
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
 
     // Сбрасываем данные
     this.dragData = {
